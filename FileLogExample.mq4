@@ -5,10 +5,10 @@
 //+------------------------------------------------------------------+
 #property copyright "Richard"
 #property link      "https://rjgunning.com"
-#property version   "1"
+#property version   "1.00"
 #property strict
 
-#include "FileLog.mqh"
+#include <FileLog.mqh>
 
 //Define Logger globally
 CFileLog *logger;
@@ -18,14 +18,14 @@ CFileLog *logger;
 int OnInit()
   {
   	//Initialise Logger with filename = "example.log", Level = WARNING and Print to console
-  	logger=new CFileLog("example.log",WARNING,true);  
+  	logger=new CFileLog("example.log",TRACE,true);  
 
   	logger.Write("Write message to log with no log level");
   	logger.Trace("Write Trace message to log");
   	logger.Debug("Write Debug message to log");
   	logger.Warning("Write Warning message to log");
   	logger.Info("Write Info message to log");
-  	logger.Error(StringFormat("Write Error message to log. Error at line %s",__LINE__));
+  	logger.Error(StringFormat("Write Error message to log. Error at line %d",__LINE__));
   	logger.Critical("Write Critical message to log");
 
   	return(INIT_SUCCEEDED);
@@ -44,9 +44,10 @@ void OnDeinit(const int reason)
 //+------------------------------------------------------------------+
 void OnTick()
   {
-  	static int lastBar;
+  	static int lastBar=0;
   	if(lastBar!=Bars)
   	{
-  		logger.Info(StringFormat("New Bar on Chart. Number of bars count in the history = %d",Bars);
+  		logger.Info(StringFormat("New Bar on Chart. Number of bars count in the history = %d",Bars));
+  		lastBar=Bars;
   	}
   }

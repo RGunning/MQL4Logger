@@ -70,7 +70,7 @@ public:
    int               Open(const string file_name,const int open_flags);
    //--- methods to access data
    uint              Write(const string value);
-   uint              Log(const ENUM_LOG_LEVEL level, const string value)
+   uint              Log(const ENUM_LOG_LEVEL level, const string value);
    void              Trace(const string value);
    void              Debug(const string value);
    void              Info(const string value);
