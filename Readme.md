@@ -4,7 +4,7 @@ FileLog is a mql4 (MetaQuotes MetaTrader 4 Language) Class for flexible logging 
 
 Log File will be saved in:
 * \<Data folder\>\MQL4\Files\
-* \<Data folder\>\Tester\Files\
+* \<Data folder\>\tester\files\
 
 ## Usage in your code:
 
