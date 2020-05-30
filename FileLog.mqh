@@ -101,6 +101,7 @@ CFileLog::CFileLog(string file_name="example.log",ENUM_LOG_LEVEL level=3,bool pr
   Open(file_name);
   SetLevel(level);
   SetPrint(print);
+  FileFlush(m_handle);
 }
 
 
@@ -110,6 +111,7 @@ CFileLog::CFileLog(string file_name="example.log",ENUM_LOG_LEVEL level=3,bool pr
 //+------------------------------------------------------------------+
 CFileLog::~CFileLog()
   {
+    FileClose(m_handle);
   }
 
 //+------------------------------------------------------------------+
@@ -122,7 +124,7 @@ CFileLog::~CFileLog()
 //+------------------------------------------------------------------+
 int CFileLog::Open(const string file_name,const int open_flags=FILE_WRITE)
   {
-   return(CFile::Open(file_name,open_flags|FILE_CSV));
+   return(CFile::Open(file_name,open_flags|FILE_CSV|FILE_SHARE_READ));
   }
 
 //+------------------------------------------------------------------+
@@ -134,8 +136,11 @@ uint CFileLog::Write(const string value)
   {
    if(m_print){Print(value);}
 //--- check handle
-   if(m_handle!=INVALID_HANDLE)
-      return(FileWrite(m_handle,TimeToStr(TimeCurrent(),TIME_DATE|TIME_MINUTES|TIME_SECONDS),"",value));
+   if(m_handle!=INVALID_HANDLE) {
+     uint uiRet = FileWrite(m_handle,TimeToStr(TimeCurrent(),TIME_DATE|TIME_MINUTES|TIME_SECONDS),"",value);
+     FileFlush(m_handle);
+     return(uiRet);
+   }
 //--- failure
    return(0);
   }
@@ -154,8 +159,11 @@ uint CFileLog::Log(const ENUM_LOG_LEVEL level, const string value)
    string levelString = StringFormat("[%s]",EnumToString(level));
    if(m_print && m_level<=level){PrintFormat("%s %s",levelString,value);}
 //--- check handle
-   if(m_handle!=INVALID_HANDLE && m_level<=level)
-      return(FileWrite(m_handle,TimeToStr(TimeCurrent(),TIME_DATE|TIME_MINUTES|TIME_SECONDS),levelString,value));
+   if(m_handle!=INVALID_HANDLE && m_level<=level) {
+     uint uiRet = FileWrite(m_handle,TimeToStr(TimeCurrent(),TIME_DATE|TIME_MINUTES|TIME_SECONDS),levelString,value);
+     FileFlush(m_handle);
+     return(uiRet);
+   }
 //--- failure
    return(0);
   }
