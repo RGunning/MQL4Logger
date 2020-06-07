@@ -17,7 +17,7 @@
 *
 *    Usage in your code:
 * 
-*        CFileLog* logger = new CFileLog("example.log",WARNING,true);
+*        CFileLog* logger = new CFileLog("example.log",WARNING,true,true);
 *        logger.Error(StringFormat("%s %d %s",__FILE__, __LINE__, "Something unexpected happen"));
 *        logger.Info(StringFormat("%s %d %s",__FILE__, __LINE__, "Calculation Done));
 *        logger.debug(StringFormat("%s %d The result of %s is %d",__FILE__, __LINE__,string1, value1));
@@ -59,9 +59,10 @@ class CFileLog : public CFile
 private:
    ENUM_LOG_LEVEL    m_level;
    bool              m_print;
+   int               iFileRead;
 public:
                      CFileLog();
-                     CFileLog(string filename="example.log",ENUM_LOG_LEVEL level=3,bool print=false);
+                     CFileLog(string file_name="example.log",ENUM_LOG_LEVEL level=3,bool print=false, bool bAppPreExist = false);
                     ~CFileLog();
    //--- methods for working with files
    void              SetLevel(ENUM_LOG_LEVEL value) {m_level=value;}
@@ -95,10 +96,14 @@ CFileLog::CFileLog():m_level(WARNING),
 //|             Level of Log message                                 | 
 //| @var bool print                                                  |
 //|             print to console                                     |
+//| @var bool bAppPreExist                                           |
+//|             write in append mode if file pre exist               |
 //+------------------------------------------------------------------+
-CFileLog::CFileLog(string file_name="example.log",ENUM_LOG_LEVEL level=3,bool print=false)
+CFileLog::CFileLog(string file_name="example.log",ENUM_LOG_LEVEL level=3,bool print=false, bool bAppPreExist = false)
 {
+  this.iFileRead=bAppPreExist?FILE_READ:0;
   Open(file_name);
+  FileSeek(m_handle, 0, SEEK_END);
   SetLevel(level);
   SetPrint(print);
   FileFlush(m_handle);
@@ -124,7 +129,7 @@ CFileLog::~CFileLog()
 //+------------------------------------------------------------------+
 int CFileLog::Open(const string file_name,const int open_flags=FILE_WRITE)
   {
-   return(CFile::Open(file_name,open_flags|FILE_CSV|FILE_SHARE_READ));
+   return(CFile::Open(file_name,this.iFileRead|open_flags|FILE_CSV|FILE_SHARE_READ));
   }
 
 //+------------------------------------------------------------------+
