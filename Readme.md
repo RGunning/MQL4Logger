@@ -8,7 +8,7 @@ Log File will be saved in:
 
 ## Usage in your code:
 
-    CFileLog* logger = new CFileLog("example.log",WARNING,true);
+    CFileLog* logger = new CFileLog("example.log",WARNING,true,true);
     logger.Error(StringFormat("%s %d %s",__FILE__, __LINE__, "Something unexpected happen"));
     logger.Info(StringFormat("%s %d %s",__FILE__, __LINE__, "Calculation Done));
     logger.debug(StringFormat("%s %d The result of %s is %d",__FILE__, __LINE__,string1, value1));
