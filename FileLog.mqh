@@ -101,7 +101,7 @@ CFileLog::CFileLog():m_level(WARNING),
 //+------------------------------------------------------------------+
 CFileLog::CFileLog(string file_name="example.log",ENUM_LOG_LEVEL level=3,bool print=false, bool bAppPreExist = false)
 {
-  this.iFileRead=bAppPreExist?FILE_READ:0;
+  this.iFileRead = bAppPreExist ? FILE_READ : 0;
   Open(file_name);
   FileSeek(m_handle, 0, SEEK_END);
   SetLevel(level);
